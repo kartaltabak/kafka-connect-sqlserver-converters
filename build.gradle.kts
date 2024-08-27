@@ -26,6 +26,8 @@ dependencies {
     implementation("io.debezium:debezium-api:2.7.0.Final")
 
     testImplementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
+
+    testImplementation("io.mockk:mockk:1.13.12")
 }
 
 sourceSets {

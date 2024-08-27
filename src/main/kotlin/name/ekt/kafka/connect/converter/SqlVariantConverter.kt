@@ -23,7 +23,5 @@ class SqlVariantConverter : CustomConverter<SchemaBuilder?, RelationalColumn> {
         }
     }
 
-    private fun convert(input: Any?): Any? {
-        return input?.toString()
-    }
+    private fun convert(input: Any?): String? = input?.toString()
 }
