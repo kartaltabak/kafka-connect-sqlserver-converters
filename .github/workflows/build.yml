@@ -25,6 +25,12 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew build
 
+      - name: Create JAR artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: kafka-connect-sqlserver-converters
+          path: build/libs/*.jar
+
       - name: Run tests and generate coverage report
         run: ./gradlew test jacocoTestReport
 
@@ -34,8 +40,8 @@ jobs:
           name: code-coverage-report
           path: build/reports/jacoco/test/html
 
-      - name: Create JAR artifact
-        uses: actions/upload-artifact@v4
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
         with:
-          name: kafka-connect-sqlserver-converters
-          path: build/libs/*.jar
+          files: build/reports/jacoco/test/jacocoTestReport.xml
+          fail_ci_if_error: true
