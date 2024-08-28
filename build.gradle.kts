@@ -5,6 +5,7 @@ plugins {
     java
     kotlin("jvm") version "2.0.0"
     `maven-publish`
+    id("jacoco")
 }
 
 group = "name.tabak.kafka.connect"
@@ -58,3 +59,15 @@ tasks.test {
     useJUnitPlatform()
 }
 
+jacoco {
+    toolVersion = "0.8.8"
+}
+
+tasks.jacocoTestReport {
+    dependsOn(tasks.test)
+
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+    }
+}
