@@ -13,11 +13,14 @@ class SqlVariantConverter : CustomConverter<SchemaBuilder?, RelationalColumn> {
     }
 
     private lateinit var field: String
-    override fun configure(props: Properties){
-        field = props.getProperty(FIELD_PROPERTY)?:""
+    override fun configure(props: Properties) {
+        field = props.getProperty(FIELD_PROPERTY) ?: ""
     }
 
-    override fun converterFor(column: RelationalColumn, registration: CustomConverter.ConverterRegistration<SchemaBuilder?>) {
+    override fun converterFor(
+        column: RelationalColumn,
+        registration: CustomConverter.ConverterRegistration<SchemaBuilder?>
+    ) {
         if (field == column.name()) {
             if (SQL_VARIANT_NAME.equals(column.typeName(), ignoreCase = true)) {
                 registration.register(SchemaBuilder.string(), ::convert)
