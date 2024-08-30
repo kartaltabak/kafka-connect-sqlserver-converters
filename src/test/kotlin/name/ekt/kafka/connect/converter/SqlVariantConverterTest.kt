@@ -6,8 +6,7 @@ import io.mockk.every
 import io.mockk.mockk
 import org.apache.kafka.connect.data.Schema.STRING_SCHEMA
 import org.apache.kafka.connect.data.SchemaBuilder
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.util.Properties
@@ -59,6 +58,23 @@ class SqlVariantConverterTest {
         converter.converterFor(column, registration)
 
         assertEquals(null, registration.schema)
+    }
+
+    @Test
+    fun `converterFor should not register converter when type does not match`() {
+        val column = mockk<RelationalColumn> {
+            every { name() } returns "testField"
+            every { typeName() } returns "other_type"
+        }
+
+        val properties = Properties().apply {
+            setProperty("field", "testField")
+        }
+        converter.configure(properties)
+
+        converter.converterFor(column, registration)
+
+        assertNull(registration.schema)
     }
 
     @Test
