@@ -35,11 +35,13 @@ class SqlVariantConverterTest {
         converter.configure(properties)
 
         converter.converterFor(column, registration)
-        val result = registration.converterFunction?.convert(123)
 
         assertNotNull(registration.schema)
         assertEquals(STRING_SCHEMA, registration.schema?.schema())
-        assertEquals("123", result)
+        assertEquals("123", registration.converterFunction?.convert(123))
+        assertEquals("test", registration.converterFunction?.convert("test"))
+        assertEquals("true", registration.converterFunction?.convert(true))
+        assertEquals(null, registration.converterFunction?.convert(null))
     }
 
     @Test
