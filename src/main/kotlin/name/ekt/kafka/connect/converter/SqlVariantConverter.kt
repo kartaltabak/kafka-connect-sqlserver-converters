@@ -18,8 +18,10 @@ class SqlVariantConverter : CustomConverter<SchemaBuilder?, RelationalColumn> {
     }
 
     override fun converterFor(column: RelationalColumn, registration: CustomConverter.ConverterRegistration<SchemaBuilder?>) {
-        if (field == column.name() && SQL_VARIANT_NAME.equals(column.typeName(), ignoreCase = true)) {
-            registration.register(SchemaBuilder.string(), ::convert)
+        if (field == column.name()) {
+            if (SQL_VARIANT_NAME.equals(column.typeName(), ignoreCase = true)) {
+                registration.register(SchemaBuilder.string(), ::convert)
+            }
         }
     }
 
