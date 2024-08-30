@@ -20,13 +20,16 @@ class SqlVariantConverter : CustomConverter<SchemaBuilder?, RelationalColumn> {
     override fun converterFor(
         column: RelationalColumn,
         registration: CustomConverter.ConverterRegistration<SchemaBuilder?>
-    ) {
+    ) =
         if (field == column.name()) {
             if (SQL_VARIANT_NAME.equals(column.typeName(), ignoreCase = true)) {
                 registration.register(SchemaBuilder.string(), ::convert)
+            } else {
+                Unit
             }
+        } else {
+            Unit
         }
-    }
 
     private fun convert(input: Any?): String? = input?.toString()
 }
