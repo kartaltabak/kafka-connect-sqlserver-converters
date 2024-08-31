@@ -9,7 +9,7 @@ import java.util.Properties
 class SqlVariantConverter : CustomConverter<SchemaBuilder?, RelationalColumn> {
     companion object {
         private const val SQL_VARIANT_NAME = "sql_variant"
-        private const val FIELD_PROPERTY = "field";
+        private const val FIELD_PROPERTY = "field"
     }
 
     private lateinit var field: String
