@@ -9,6 +9,7 @@ import org.apache.kafka.connect.data.SchemaBuilder
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import java.util.Properties
 
 class SqlVariantConverterTest {
@@ -44,18 +45,12 @@ class SqlVariantConverterTest {
     }
 
     @Test
-    fun `converterFor should not register converter when field is null`() {
-        val column = mockk<RelationalColumn> {
-            every { name() } returns "testField"
-            every { typeName() } returns "sql_variant"
+    fun `converterFor should fail when configure is not called`() {
+        val column = mockk<RelationalColumn>()
+
+        assertThrows<UninitializedPropertyAccessException> {
+            converter.converterFor(column, registration)
         }
-
-        val properties = Properties()
-        converter.configure(properties)
-
-        converter.converterFor(column, registration)
-
-        assertNull(registration.schema)
     }
 
     @Test
