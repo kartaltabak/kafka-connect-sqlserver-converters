@@ -1,6 +1,6 @@
 # Kafka Connect SQL Server Variant Converters
 
-[![codecov](https://codecov.io/gh/username/repository/branch/main/graph/badge.svg)](https://codecov.io/gh/username/repository)
+[![codecov](https://codecov.io/gh/kartaltabak/kafka-connect-sqlserver-converters/graph/badge.svg?token=1KBH26O0DT)](https://codecov.io/gh/kartaltabak/kafka-connect-sqlserver-converters)
 
 ## Overview
 The `Kafka Connect SQLServer Converter` library provides custom converters for Kafka Connect, specifically designed to handle SQL `sql_variant` types. This project aims to extend the capabilities of Kafka Connect by offering additional converters, ensuring seamless integration and data transformation from databases to Kafka topics.
