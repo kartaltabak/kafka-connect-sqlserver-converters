@@ -76,6 +76,23 @@ class SqlVariantConverterTest {
     }
 
     @Test
+    fun `converterFor should not register converter when field matches column name with different case`() {
+        val column = mockk<RelationalColumn> {
+            every { name() } returns "TestField"
+            every { typeName() } returns "sql_variant"
+        }
+
+        val properties = Properties().apply {
+            setProperty("field", "testField") // different case
+        }
+        converter.configure(properties)
+
+        converter.converterFor(column, registration)
+
+        assertNull(registration.schema)
+    }
+
+    @Test
     fun `converterFor should not register converter when field does not match`() {
         val column = mockk<RelationalColumn> {
             every { name() } returns "otherField"
