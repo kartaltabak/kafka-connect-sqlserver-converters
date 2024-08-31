@@ -21,22 +21,8 @@ class SqlVariantConverter : CustomConverter<SchemaBuilder?, RelationalColumn> {
         column: RelationalColumn,
         registration: CustomConverter.ConverterRegistration<SchemaBuilder?>
     ) {
-        val b = field == column.name()
-        if (b) {
-            coverterFor2(column, registration)
-        } else {
-            Unit
-        }
-    }
-
-    private fun coverterFor2(
-        column: RelationalColumn,
-        registration: CustomConverter.ConverterRegistration<SchemaBuilder?>
-    ) {
-        if (SQL_VARIANT_NAME.equals(column.typeName(), ignoreCase = true)) {
+        if (field == column.name() && SQL_VARIANT_NAME.equals(column.typeName(), ignoreCase = true)) {
             registration.register(SchemaBuilder.string(), ::convert)
-        } else {
-            Unit
         }
     }
 

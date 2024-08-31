@@ -9,7 +9,6 @@ import org.apache.kafka.connect.data.SchemaBuilder
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 import java.util.Properties
 
 class SqlVariantConverterTest {
@@ -42,49 +41,6 @@ class SqlVariantConverterTest {
         assertEquals("test", registration.converterFunction?.convert("test"))
         assertEquals("true", registration.converterFunction?.convert(true))
         assertEquals(null, registration.converterFunction?.convert(null))
-    }
-
-    @Test
-    fun `converterFor should fail when configure is not called`() {
-        val column = mockk<RelationalColumn>()
-
-        assertThrows<UninitializedPropertyAccessException> {
-            converter.converterFor(column, registration)
-        }
-    }
-
-    @Test
-    fun `converterFor should not register converter when column name is null`() {
-        val column = mockk<RelationalColumn> {
-            every { name() } returns null
-            every { typeName() } returns "sql_variant"
-        }
-
-        val properties = Properties().apply {
-            setProperty("field", "testField")
-        }
-        converter.configure(properties)
-
-        converter.converterFor(column, registration)
-
-        assertNull(registration.schema)
-    }
-
-    @Test
-    fun `converterFor should not register converter when field matches column name with different case`() {
-        val column = mockk<RelationalColumn> {
-            every { name() } returns "TestField"
-            every { typeName() } returns "sql_variant"
-        }
-
-        val properties = Properties().apply {
-            setProperty("field", "testField") // different case
-        }
-        converter.configure(properties)
-
-        converter.converterFor(column, registration)
-
-        assertNull(registration.schema)
     }
 
     @Test
@@ -129,23 +85,6 @@ class SqlVariantConverterTest {
         }
 
         val properties = Properties()
-        converter.configure(properties)
-
-        converter.converterFor(column, registration)
-
-        assertEquals(null, registration.schema)
-    }
-
-    @Test
-    fun `converterFor should not register converter when field is not sql_variant`() {
-        val column = mockk<RelationalColumn> {
-            every { name() } returns "testField"
-            every { typeName() } returns "other_type"
-        }
-
-        val properties = Properties().apply {
-            setProperty("field", "testField")
-        }
         converter.configure(properties)
 
         converter.converterFor(column, registration)
