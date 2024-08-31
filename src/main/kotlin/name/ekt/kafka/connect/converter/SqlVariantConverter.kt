@@ -22,14 +22,21 @@ class SqlVariantConverter : CustomConverter<SchemaBuilder?, RelationalColumn> {
         registration: CustomConverter.ConverterRegistration<SchemaBuilder?>
     ) =
         if (field == column.name()) {
-            if (SQL_VARIANT_NAME.equals(column.typeName(), ignoreCase = true)) {
-                registration.register(SchemaBuilder.string(), ::convert)
-            } else {
-                Unit
-            }
+            coverterFor2(column, registration)
         } else {
             Unit
         }
+
+    private fun coverterFor2(
+        column: RelationalColumn,
+        registration: CustomConverter.ConverterRegistration<SchemaBuilder?>
+    ) {
+        if (SQL_VARIANT_NAME.equals(column.typeName(), ignoreCase = true)) {
+            registration.register(SchemaBuilder.string(), ::convert)
+        } else {
+            Unit
+        }
+    }
 
     private fun convert(input: Any?): String? = input?.toString()
 }
