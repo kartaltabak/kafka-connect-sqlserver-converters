@@ -20,12 +20,14 @@ class SqlVariantConverter : CustomConverter<SchemaBuilder?, RelationalColumn> {
     override fun converterFor(
         column: RelationalColumn,
         registration: CustomConverter.ConverterRegistration<SchemaBuilder?>
-    ) =
-        if (field == column.name()) {
+    ) {
+        val b = field == column.name()
+        if (b) {
             coverterFor2(column, registration)
         } else {
             Unit
         }
+    }
 
     private fun coverterFor2(
         column: RelationalColumn,
