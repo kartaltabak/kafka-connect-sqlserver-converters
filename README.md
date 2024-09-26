@@ -17,11 +17,11 @@ To use this library, follow these steps:
     - Download the latest JAR file.
 
 2. **Deploying the Converter JAR**:
-   - To integrate this custom converter with a Kafka Connect connector, place the downloaded JAR file in the specific subdirectory of the connector's plugin path (e.g., `/usr/share/java/debezium-connector-sqlserver`). Make sure it's alongside other required JAR files.
-   - For detailed instructions on deploying Debezium custom converters, visit the official documentation: [Debezium - Deploying Custom Converters](https://debezium.io/documentation/reference/stable/development/converters.html#deploying-a-debezium-custom-converter).
+    - To integrate this custom converter with a Kafka Connect connector, place the downloaded JAR file in the specific subdirectory of the connector's plugin path (e.g., `/usr/share/java/debezium-connector-sqlserver`). Make sure it's alongside other required JAR files.
+    - For detailed instructions on deploying Debezium custom converters, visit the official documentation: [Debezium - Deploying Custom Converters](https://debezium.io/documentation/reference/stable/development/converters.html#deploying-a-debezium-custom-converter).
 
 ## Converters
-This project aims to provide a variety of custom converters for Kafka Connect. 
+This project aims to provide a variety of custom converters for Kafka Connect.
 Below is a list of currently available converters:
 * [SqlVariantConverter](#sqlvariantconverter)
 
@@ -29,27 +29,56 @@ Below is a list of currently available converters:
 
 ### SqlVariantConverter
 
-Converts `sql_variant` fields from SQL Server into a string representation in Kafka Connect. 
-This custom converter is used to handle the special `sql_variant` data type from SQL Server, 
-enabling flexible data extraction and processing in Kafka Connect.
+The `SqlVariantConverter` is a custom converter designed 
+for use with Debezium SQLServer connector in Kafka Connect. 
+It handles SQL Server's `sql_variant` data type 
+by converting it into a string format. 
+This converter registers a string schema for any column 
+that matches the specified field name and has a `sql_variant` type.
 
 #### Configuration
 
-- `field`: The name of the SQL field to be converted. 
-   This field is required for the converter to know which column of type `sql_variant` it needs to process.
+- `field`: The name of the SQL field to be converted.
+  This field is required for the converter to know which column of type `sql_variant` it needs to process.
 
 #### Example
 
 ```json
-"transforms": "sql_variant_converter",
-"transforms.sql_variant_converter.type": "name.ekt.kafka.connect.converter.SqlVariantConverter",
-"transforms.sql_variant_converter.field": "variant_column"
+{
+  "name": "your-connector-name",
+  "connector.class": "io.debezium.connector.sqlserver.SqlServerConnector",
+  "tasks.max": "1",
+  "database.hostname": "your-sqlserver-hostname",
+  "database.port": "1433",
+  "database.user": "your-username",
+  "database.password": "your-password",
+  "database.dbname": "your-database-name",
+  "database.server.name": "your-server-name",
+  "table.include.list": "your_table_name",
+
+  "converters": "sqlVariantConverter",
+  "sqlVariantConverter.type": "name.ekt.kafka.connect.converter.SqlVariantConverter",
+  "sqlVariantConverter.field": "your_column_name",
+
+  "transforms": "unwrap",
+  "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState"
+}
 ```
+
+#### Usage Details
+
+The `SqlVariantConverter` is intended to be used in scenarios 
+where you are working with SQL Server databases that include 
+`sql_variant` columns. 
+The converter ensures that these columns are correctly 
+converted to a string format within the Kafka Connect data pipeline, 
+allowing for consistent and reliable data handling in 
+downstream systems.
 
 ---
 
 ## Contributing
-We welcome contributions from the community. 
+We welcome contributions from the community.
 If you have any ideas, suggestions, or bug reports, please open an issue or submit a pull request.
 
 ## License
