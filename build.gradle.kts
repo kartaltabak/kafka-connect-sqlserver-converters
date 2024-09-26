@@ -19,7 +19,7 @@ repositories {
 }
 
 val kafkaConnectVersion = "7.5.3-ccs"
-val junitVersion = "5.10.2"
+val junitVersion = "5.11.1"
 
 dependencies {
     implementation("org.apache.kafka:connect-transforms:$kafkaConnectVersion")
@@ -29,6 +29,22 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
 
     testImplementation("io.mockk:mockk:1.13.12")
+
+    testImplementation("org.testcontainers:testcontainers:1.20.1")
+    // required to overwrite testcontainers problematic dependency in 1.20.1
+    testImplementation("org.apache.commons:commons-compress:1.27.1")
+
+    testImplementation("org.testcontainers:kafka:1.20.1")
+
+    testImplementation("org.testcontainers:mssqlserver:1.20.1")
+
+    testImplementation("org.testcontainers:postgresql:1.20.1")
+
+    testImplementation("com.microsoft.sqlserver:mssql-jdbc:12.8.1.jre11")
+    testImplementation("com.squareup.okhttp3:okhttp:4.12.0")
+    testImplementation("org.postgresql:postgresql:42.7.4")
+    testImplementation("org.apache.kafka:connect-transforms:$kafkaConnectVersion")
+    testImplementation("io.debezium:debezium-api:2.7.0.Final")
 }
 
 sourceSets {
@@ -43,6 +59,11 @@ sourceSets {
         }
     }
 }
+
+tasks.withType<Test> {
+    dependsOn(tasks.named("jar"))
+}
+
 
 tasks.withType<KotlinCompile> {
     compilerOptions {

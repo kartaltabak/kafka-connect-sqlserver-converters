@@ -13,27 +13,35 @@ The `Kafka Connect SQLServer Converter` library provides custom converters for K
 To use this library, follow these steps:
 
 1. **Download the Converter JAR**:
-    - Go to the [Releases](https://github.com/your-repo/releases) section of the repository.
+    - Go to the [Releases](https://github.com/kartaltabak/kafka-connect-sqlserver-converters/releases) section of the repository.
     - Download the latest JAR file.
 
-2. **Deploy the JAR**:
-    - Copy the downloaded JAR file to the `plugins` directory of your Kafka Connect installation.
+2. **Deploying the Converter JAR**:
+    - To integrate this custom converter with a Kafka Connect connector, place the downloaded JAR file in the specific subdirectory of the connector's plugin path (e.g., `/usr/share/java/debezium-connector-sqlserver`). Make sure it's alongside other required JAR files.
+    - For detailed instructions on deploying Debezium custom converters, visit the official documentation: [Debezium - Deploying Custom Converters](https://debezium.io/documentation/reference/stable/development/converters.html#deploying-a-debezium-custom-converter).
 
 ## Converters
+This project aims to provide a variety of custom converters for Kafka Connect.
+Below is a list of currently available converters:
+* [SqlVariantConverter](#sqlvariantconverter)
+
+---
 
 ### SqlVariantConverter
 
-The `SqlVariantConverter` is a custom converter designed for use with Debezium connectors in Kafka Connect. It handles SQL Server's `sql_variant` data type by converting it into a string format. This converter registers a string schema for any column that matches the specified field name and has a `sql_variant` type.
+The `SqlVariantConverter` is a custom converter designed 
+for use with Debezium SQLServer connector in Kafka Connect. 
+It handles SQL Server's `sql_variant` data type 
+by converting it into a string format. 
+This converter registers a string schema for any column 
+that matches the specified field name and has a `sql_variant` type.
 
 #### Configuration
 
-- `field` (default: `""`): The name of the column that should be converted if it has the `sql_variant` type. 
-This property must be set through the converter's configuration to match the column name in the database.
+- `field`: The name of the SQL field to be converted.
+  This field is required for the converter to know which column of type `sql_variant` it needs to process.
 
-#### Example Configuration
-
-To configure the `SqlVariantConverter` in your Debezium connector, 
-you need to add the converter to the connector's configuration. Here's how you might configure it in a JSON format for a Debezium SQL Server connector:
+#### Example
 
 ```json
 {
@@ -57,23 +65,26 @@ you need to add the converter to the connector's configuration. Here's how you m
 }
 ```
 
-In this example:
-- **`converters`**: Defines the converter to be used. 
-Here, `sqlVariantConverter` is the name given to the custom converter.
-- **`sqlVariantConverter.type`**: Specifies the fully-qualified class name of the `SqlVariantConverter`.
-- **`sqlVariantConverter.field`**: Specifies the column name that should be converted if it matches the `sql_variant` type.
+#### Usage Details
 
-### Usage Details
+The `SqlVariantConverter` is intended to be used in scenarios 
+where you are working with SQL Server databases that include 
+`sql_variant` columns. 
+The converter ensures that these columns are correctly 
+converted to a string format within the Kafka Connect data pipeline, 
+allowing for consistent and reliable data handling in 
+downstream systems.
 
-The `SqlVariantConverter` is intended to be used in scenarios where you are working with SQL Server databases that include `sql_variant` columns. The converter ensures that these columns are correctly converted to a string format within the Kafka Connect data pipeline, allowing for consistent and reliable data handling in downstream systems.
+---
+
 ## Contributing
-We welcome contributions from the community. 
+We welcome contributions from the community.
 If you have any ideas, suggestions, or bug reports, please open an issue or submit a pull request.
 
 ## License
 This project is licensed under the MIT License. See the LICENSE file for details.
 
-Thank you for using Kafka Connect SQL Variant Converter!
+Thank you for using Kafka Connect SQLServer Converters!
 
 
 
